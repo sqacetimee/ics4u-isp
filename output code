@@ -1,0 +1,56 @@
+import java.io.*;
+import java.util.*;
+
+public class studenttest{
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        //creates a new instance of the Student class
+        Student Student = new Student();
+
+        //displays introduction
+        Student.Intro();
+
+        //loads any data from previous runs to arraylists in new runs
+        Student.loadData();
+
+        //main program loop
+        while (true){
+            Student.Options();
+            String ans = reader.readLine();
+
+            //if statement for option selections
+            if(ans.equals("1")){
+                Student.getName();
+                System.out.println("-----------------------------------------------------------------------------------------------------------");
+                Student.getAge();
+                System.out.println("-----------------------------------------------------------------------------------------------------------");
+                Student.getGender();
+                System.out.println("-----------------------------------------------------------------------------------------------------------");
+                Student.getLocation();
+                System.out.println("-----------------------------------------------------------------------------------------------------------");
+                Student.getUniversity();
+                System.out.println("-----------------------------------------------------------------------------------------------------------");
+                Student.getMark();
+                System.out.println("-----------------------------------------------------------------------------------------------------------");
+            }
+            else if(ans.equals("2")){
+                Student.sort();
+                Student.printBestStudents();
+            }
+            else if(ans.equals("3")){
+                Student.Clear();
+            }
+            else if(ans.equals("4")){
+                break; //ends program if student enters 4
+            }
+            else{
+                System.out.println("Invalid option. Please choose again.");
+            }
+
+            //saves the collected data to the data file
+            Student.saveData();      
+        }
+    }
+}
