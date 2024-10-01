@@ -1,0 +1,230 @@
+import java.io.*;
+import java.util.*;
+
+public class Student {
+
+    //lists to store student information
+    private ArrayList<String> name = new ArrayList<String>();
+    private ArrayList<Integer> age = new ArrayList<Integer>();
+    private ArrayList<String> gender = new ArrayList<String>();
+    private ArrayList<String> location = new ArrayList<String>();
+    private ArrayList<Double> marks = new ArrayList<Double>();
+    private ArrayList<String> universityName = new ArrayList<String>();
+
+    //constructor to initialize aa student with given details
+    public Student(String name, int age, String gender, String education, String location, double marks, String universityName) {
+        this.name.add(name);
+        this.age.add(age);
+        this.gender.add(gender);
+        this.location.add(location);
+        this.marks.add(marks);
+        this.universityName.add(universityName);
+    }
+
+    //default constructor
+    public Student() {
+        this.name = new ArrayList<String>();
+        this.age = new ArrayList<Integer>();
+        this.gender = new ArrayList<String>();
+        this.location = new ArrayList<String>();
+        this.marks = new ArrayList<Double>();
+        this.universityName = new ArrayList<String>();
+    }
+
+    //method to save student information to data file
+    public void saveData() throws IOException {
+        PrintWriter writer = new PrintWriter(new FileWriter("Students.txt"));
+        for (int i = 0; i < name.size(); i++) {
+            writer.println(name.get(i) + "," + age.get(i) + "," + gender.get(i) + "," +
+                           location.get(i) + "," + marks.get(i) + "," + universityName.get(i));
+        }
+        writer.close();
+    }
+
+    //method to load data from the file back into program
+    public void loadData() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader("Students.txt"));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",");
+            name.add(parts[0]);
+            age.add(Integer.parseInt(parts[1]));
+            gender.add(parts[2]);
+            location.add(parts[3]);
+            marks.add(Double.parseDouble(parts[4]));
+            universityName.add(parts[5]);
+        }
+        reader.close();
+    }
+
+    //method to display introduction
+    public void Intro() throws IOException, InterruptedException{
+        BufferedReader reader = new BufferedReader(new FileReader("introisp.txt"));
+        for (int i = 0; i < 9; i++){
+            System.out.println(reader.readLine());
+            Thread.sleep(100);
+        }
+    }
+
+    //method to display options
+    public void Options() {
+        System.out.println("Choose an option:");
+        System.out.println("1. Add Student");
+        System.out.println("2. Calculate Best Students to Hire (Output)");
+        System.out.println("3. Clear Lists");
+        System.out.println("4. Exit");
+        System.out.println();
+    
+    }
+
+    //method to clear arraylists || datafile
+    public void Clear() {
+        if (name.size() > 0) {
+            name.clear();
+            age.clear();
+            gender.clear();
+            location.clear();
+            marks.clear();
+            universityName.clear();
+            System.out.println();
+            System.out.println("Student List Has Been Cleared...");
+            System.out.println();
+        }
+        else{
+            System.out.println();
+            System.out.println("Student List is Already Empty...");
+            System.out.println();
+        }
+    }
+
+    //method to get student name from input
+    public void getName() throws IOException, InterruptedException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
+        System.out.println("Enter a students first and last name(E.g 'John Doe').");
+        name.add(reader.readLine());
+    }
+
+    //method to get and check age
+    public void getAge() throws IOException, InterruptedException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter the students age (Between 20 and 65).");
+        while(true){
+            int ans = (Integer.parseInt(reader.readLine()));
+            if(ans >= 20 && ans <= 65){
+                age.add(ans);
+                break;
+            }
+            else{
+                System.out.println();
+                System.out.println("Age must be between 20 and 65. Please try again...");
+                System.out.println();
+                }
+        }    
+    }
+
+    //method to get and check gender
+    public void getGender() throws IOException, InterruptedException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter the student's gender (M/F).");
+        while (true) {
+            String ans = reader.readLine();
+            if (ans.equalsIgnoreCase("M") || ans.equalsIgnoreCase("F")) {
+                gender.add(ans);
+                break;
+            } else {
+                System.out.println();
+                System.out.println("Invalid input. Please enter M for Male or F for Female...");
+                System.out.println();
+            }
+        }
+    }    
+
+    //method to get users location from input
+    public void getLocation() throws IOException, InterruptedException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter the students location.");
+            location.add(reader.readLine());
+    }
+    
+    //method to get and check students gpa
+    public void getMark() throws IOException, InterruptedException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter the students GPA (0 - 4.0 Scale ).");
+        while(true){
+            double ans = (Double.parseDouble(reader.readLine()));
+            if (ans >= 0 && ans <= 4.0){
+                marks.add(ans);
+                break;
+            }
+            else{
+                System.out.println();
+                System.out.println("Invalid GPA. Please Try again...");
+                System.out.println();
+            }    
+        }
+    }
+
+    //method to get the university the student attended from input
+    public void getUniversity() throws IOException, InterruptedException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter the University the student attended.");
+        universityName.add(reader.readLine());
+    }
+
+    //method that sorts the parallel arrays from best students to worst students
+    public void sort() {
+        for (int i = 0; i < marks.size(); i++) {
+            for (int j = i + 1; j < marks.size(); j++) {
+                if (marks.get(i) < marks.get(j)) {
+                    double tempMark = marks.get(i);
+                    marks.set(i, marks.get(j));
+                    marks.set(j, tempMark);
+
+                    String tempName = name.get(i);
+                    name.set(i, name.get(j));
+                    name.set(j, tempName);
+
+                    String tempLocation = location.get(i);
+                    location.set(i, location.get(j));
+                    location.set(j, tempLocation);
+
+                    String tempUniversity = universityName.get(i);
+                    universityName.set(i, universityName.get(j));
+                    universityName.set(j, tempUniversity);
+
+                    String tempGender = gender.get(i);
+                    gender.set(i, gender.get(j));
+                    gender.set(j, tempGender);
+
+                    int tempAge = age.get(i);
+                    age.set(i, age.get(j));
+                    age.set(j, tempAge);
+                }
+            }
+        }
+    }
+
+    //displays the students from best to worst to indicate who to interview 
+    public void printBestStudents() throws InterruptedException {
+        if (name.size() > 0) {
+            System.out.println("-----------------------------");
+            System.out.println("Best Students to interview:");
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.println();
+            System.out.printf("%-6s %-25s %-6s %-10s %-20s %-6s %-25s\n", "Rank", "Name", "Age", "Gender", "Location", "GPA", "University");
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            for (int i = 0; i < name.size(); i++) {
+                System.out.printf("%-6d %-25s %-6d %-10s %-20s %-6.2f %-25s\n", 
+                                  i + 1, name.get(i), age.get(i), gender.get(i), location.get(i), marks.get(i), universityName.get(i));
+                Thread.sleep(100);
+                System.out.println("-----------------------------------------------------------------------------------------------------------");
+                Thread.sleep(100);    
+            }
+        } else {
+            System.out.println();
+            System.out.println("There are no students on the list.");
+            System.out.println();
+        }
+    }  
+}
